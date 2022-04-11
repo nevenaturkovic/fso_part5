@@ -12,7 +12,8 @@ const App = () => {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
-  const [errorMessage, setErrorMessage] = useState(null)
+  // const [errorMessage, setErrorMessage] = useState(null)
+  const [notifications, setNotifications] = useState(null)
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -27,15 +28,18 @@ const App = () => {
       setUser(user)
       setUsername("")
       setPassword("")
-    } catch (exception) {
-      setErrorMessage("Wrong credentials")
+    } catch (error) {
+      setNotifications({
+        message: "wrong username or password",
+        kind: "error",
+      })
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotifications(null)
       }, 5000)
     }
   }
 
-  const handleNewBlog = (event) => {
+  const handleNewBlog = async (event) => {
     event.preventDefault()
     const blogObject = {
       title: title,
@@ -44,17 +48,34 @@ const App = () => {
       user: user,
     }
 
-    blogService.create(blogObject).then((returnedBlog) => {
+    try {
+      const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
       setTitle("")
       setAuthor("")
       setUrl("")
-    })
+      setNotifications({
+        message: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
+        kind: "newBlog",
+      })
+      setTimeout(() => {
+        setNotifications(null)
+      }, 5000)
+    } catch (error) {
+      setNotifications({
+        message: "invalid blog post",
+        kind: "error",
+      })
+      setTimeout(() => {
+        setNotifications(null)
+      }, 5000)
+    }
   }
 
   const loginForm = () => (
     <div>
       <h2>log in to application</h2>
+      <Notification notification={notifications} />
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -82,6 +103,7 @@ const App = () => {
   const blogList = () => (
     <div>
       <h2>blogs</h2>
+      <Notification notification={notifications} />
       <p>
         {user.name} logged in
         <button
