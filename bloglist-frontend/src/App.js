@@ -11,9 +11,6 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
   const [notifications, setNotifications] = useState(null)
 
   const handleLogin = async (event) => {
@@ -32,39 +29,6 @@ const App = () => {
     } catch (error) {
       setNotifications({
         message: "wrong username or password",
-        kind: "error",
-      })
-      setTimeout(() => {
-        setNotifications(null)
-      }, 5000)
-    }
-  }
-
-  const handleNewBlog = async (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url,
-      user: user,
-    }
-
-    try {
-      const returnedBlog = await blogService.create(blogObject)
-      setBlogs(blogs.concat(returnedBlog))
-      setTitle("")
-      setAuthor("")
-      setUrl("")
-      setNotifications({
-        message: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
-        kind: "newBlog",
-      })
-      setTimeout(() => {
-        setNotifications(null)
-      }, 5000)
-    } catch (error) {
-      setNotifications({
-        message: "invalid blog post",
         kind: "error",
       })
       setTimeout(() => {
@@ -119,13 +83,9 @@ const App = () => {
       </p>
       <Togglable buttonLabel="new note">
         <BlogForm
-          handleNewBlog={handleNewBlog}
-          title={title}
-          setTitle={setTitle}
-          author={author}
-          setAuthor={setAuthor}
-          url={url}
-          setUrl={setUrl}
+          blogs={blogs}
+          setBlogs={setBlogs}
+          setNotifications={setNotifications}
         />
       </Togglable>
       {blogs.map((blog) => (
