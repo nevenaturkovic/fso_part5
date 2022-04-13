@@ -1,4 +1,16 @@
-const Blog = ({ blog }) => {
+import { useState } from "react"
+import Togglable from "./Togglable"
+
+const Blog = ({ blog, user }) => {
+  const [visible, setVisible] = useState(false)
+
+  const hideWhenVisible = { display: visible ? "none" : "" }
+  const showWhenVisible = { display: visible ? "" : "none" }
+
+  const toggleVisibility = () => {
+    setVisible(!visible)
+  }
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -6,21 +18,31 @@ const Blog = ({ blog }) => {
     borderWidth: 1,
     marginBottom: 5,
   }
-
-  return (
-    <div style={blogStyle}>
-      <div>
-        {blog.title} <button type="submit">view</button>
-        <br />
-        {blog.url}
-        <br />
-        {blog.likes} <button>like</button>
-        <br />
-        {blog.author}
-        <br />
+  if (visible) {
+    return (
+      <div style={showWhenVisible}>
+        <div style={blogStyle}>
+          {blog.title} {blog.author}
+          <button onClick={toggleVisibility}>hide</button>
+          <div> {blog.url}</div>
+          <div>
+            {" "}
+            {blog.likes} <button>like</button>
+          </div>
+          <div>{blog.user.username}</div>{" "}
+        </div>
       </div>
-    </div>
-  )
+    )
+  } else {
+    return (
+      <div style={hideWhenVisible}>
+        <div style={blogStyle}>
+          {blog.title} {blog.author}{" "}
+          <button onClick={toggleVisibility}>view</button>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default Blog

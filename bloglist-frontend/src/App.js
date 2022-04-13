@@ -88,6 +88,7 @@ const App = () => {
           setBlogs={setBlogs}
           setNotifications={setNotifications}
           blogFormRef={blogFormRef}
+          user={user}
         />
       </Togglable>
       {blogs.map((blog) => (
