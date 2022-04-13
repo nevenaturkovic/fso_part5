@@ -82,7 +82,7 @@ const App = () => {
           logout
         </button>{" "}
       </p>
-      <Togglable buttonLabel="new note" ref={blogFormRef}>
+      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm
           blogs={blogs}
           setBlogs={setBlogs}
