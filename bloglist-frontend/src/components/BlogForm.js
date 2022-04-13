@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import blogService from "../services/blogs"
 
-const BlogForm = ( {blogs, setBlogs, setNotifications} ) => {
+const BlogForm = ({ blogs, setBlogs, setNotifications, blogFormRef }) => {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
@@ -12,11 +12,12 @@ const BlogForm = ( {blogs, setBlogs, setNotifications} ) => {
     const blogObject = {
       title: title,
       author: author,
-      url: url
+      url: url,
     }
 
     try {
       const returnedBlog = await blogService.create(blogObject)
+      blogFormRef.current.toggleVisibility()
       setBlogs(blogs.concat(returnedBlog))
       setTitle("")
       setAuthor("")
@@ -29,7 +30,7 @@ const BlogForm = ( {blogs, setBlogs, setNotifications} ) => {
         setNotifications(null)
       }, 5000)
     } catch (error) {
-        console.log(error)
+      console.log(error)
       setNotifications({
         message: "invalid blog post",
         kind: "error",

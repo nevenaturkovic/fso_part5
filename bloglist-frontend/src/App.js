@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Blog from "./components/Blog"
 import Notification from "./components/Notification"
 import Togglable from "./components/Togglable"
@@ -12,6 +12,7 @@ const App = () => {
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
   const [notifications, setNotifications] = useState(null)
+  const blogFormRef = useRef()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -81,11 +82,12 @@ const App = () => {
           logout
         </button>{" "}
       </p>
-      <Togglable buttonLabel="new note">
+      <Togglable buttonLabel="new note" ref={blogFormRef}>
         <BlogForm
           blogs={blogs}
           setBlogs={setBlogs}
           setNotifications={setNotifications}
+          blogFormRef={blogFormRef}
         />
       </Togglable>
       {blogs.map((blog) => (
