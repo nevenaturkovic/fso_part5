@@ -19,6 +19,24 @@ const Blog = ({ blog, user, setBlogs, blogs }) => {
     borderWidth: 1,
     marginBottom: 5,
   }
+
+  const renderDeleteButton = () => {
+    if (blog.user.username === user.username) {
+      return (
+        <button
+          onClick={async (event) => {
+            if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+              await blogService.remove(blog.id)
+              setBlogs(blogs.filter((b) => blog.id !== b.id))
+            }
+          }}
+        >
+          remove
+        </button>
+      )
+    }
+  }
+
   if (visible) {
     return (
       <div style={showWhenVisible}>
@@ -40,19 +58,7 @@ const Blog = ({ blog, user, setBlogs, blogs }) => {
               like
             </button>
           </div>
-          <div>{blog.user.username}</div>{" "}
-          <button
-            onClick={async (event) => {
-              if (
-                window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
-              ) {
-                await blogService.remove(blog.id)
-                setBlogs(blogs.filter((b) => blog.id !== b.id))
-              }
-            }}
-          >
-            remove
-          </button>
+          <div>{blog.user.username}</div> {renderDeleteButton()}
         </div>
       </div>
     )
