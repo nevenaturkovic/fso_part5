@@ -1,7 +1,8 @@
 import { useState } from "react"
 import Togglable from "./Togglable"
+import blogService from "../services/blogs"
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog, user, setBlogs, blogs }) => {
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? "none" : "" }
@@ -27,7 +28,19 @@ const Blog = ({ blog, user }) => {
           <div> {blog.url}</div>
           <div>
             {" "}
-            {blog.likes} <button>like</button>
+            {blog.likes}{" "}
+            <button
+              onClick={async (event) => {
+                const updatedBlog = await blogService.update(blog.id, {
+                  likes: blog.likes + 1,
+                })
+                setBlogs(
+                  blogs.map((b) => (blog.id === b.id ? updatedBlog : b))
+                )
+              }}
+            >
+              like
+            </button>
           </div>
           <div>{blog.user.username}</div>{" "}
         </div>
