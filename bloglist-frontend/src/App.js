@@ -98,7 +98,13 @@ const App = () => {
   )
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    blogService
+      .getAll()
+      .then((blogs) =>
+        setBlogs(
+          blogs.sort((first, second) => (first.likes > second.likes ? -1 : 1))
+        )
+      )
   }, [])
 
   useEffect(() => {
