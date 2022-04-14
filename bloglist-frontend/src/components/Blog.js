@@ -34,15 +34,25 @@ const Blog = ({ blog, user, setBlogs, blogs }) => {
                 const updatedBlog = await blogService.update(blog.id, {
                   likes: blog.likes + 1,
                 })
-                setBlogs(
-                  blogs.map((b) => (blog.id === b.id ? updatedBlog : b))
-                )
+                setBlogs(blogs.map((b) => (blog.id === b.id ? updatedBlog : b)))
               }}
             >
               like
             </button>
           </div>
           <div>{blog.user.username}</div>{" "}
+          <button
+            onClick={async (event) => {
+              if (
+                window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
+              ) {
+                await blogService.remove(blog.id)
+                setBlogs(blogs.filter((b) => blog.id !== b.id))
+              }
+            }}
+          >
+            remove
+          </button>
         </div>
       </div>
     )
