@@ -1,5 +1,4 @@
 import { useState } from "react"
-import Togglable from "./Togglable"
 import blogService from "../services/blogs"
 
 const Blog = ({ blog, user, setBlogs, blogs }) => {
@@ -24,7 +23,7 @@ const Blog = ({ blog, user, setBlogs, blogs }) => {
     if (blog.user.username === user.username) {
       return (
         <button
-          onClick={async (event) => {
+          onClick={async () => {
             if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
               await blogService.remove(blog.id)
               setBlogs(blogs.filter((b) => blog.id !== b.id))
@@ -48,7 +47,7 @@ const Blog = ({ blog, user, setBlogs, blogs }) => {
             {" "}
             {blog.likes}{" "}
             <button
-              onClick={async (event) => {
+              onClick={async () => {
                 const updatedBlog = await blogService.update(blog.id, {
                   likes: blog.likes + 1,
                 })
