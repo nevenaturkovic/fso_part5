@@ -49,7 +49,7 @@ const Blog = ({ blog, user, setBlogs, blogs }) => {
       <div style={showWhenVisible}>
         <div>{blog.url}</div>
         <div>
-          {blog.likes}{" "}
+          <span className="numberOfLikes">{blog.likes}</span>{" "}
           <button
             onClick={async () => {
               const updatedBlog = await blogService.update(blog.id, {
