@@ -96,8 +96,18 @@ const App = () => {
           key={blog.id}
           user={user}
           blog={blog}
-          setBlogs={setBlogs}
-          blogs={blogs}
+          handleLike={async () => {
+            const updatedBlog = await blogService.update(blog.id, {
+              likes: blog.likes + 1,
+            })
+            setBlogs(blogs.map((b) => (blog.id === b.id ? updatedBlog : b)))
+          }}
+          handleDelete={async () => {
+            if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+              await blogService.remove(blog.id)
+              setBlogs(blogs.filter((b) => blog.id !== b.id))
+            }
+          }}
         />
       ))}
     </div>

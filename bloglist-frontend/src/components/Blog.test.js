@@ -1,9 +1,10 @@
 import React from "react"
 import "@testing-library/jest-dom/extend-expect"
 import { render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import Blog from "./Blog"
 
-test("title and author are rendered", () => {
+describe("<Blog />", () => {
   const user = {
     token: "tst",
     username: "cveklica123",
@@ -39,19 +40,74 @@ test("title and author are rendered", () => {
 
   const blog = blogs[0]
 
-  const { container } = render(
-    <Blog user={user} blog={blog} setBlogs={null} blogs={blogs} />
-  )
+  var container
+  var mockHandlerLike
+  var mockHandlerDelete
 
-  const title1 = screen.getByText("Title 1")
-  expect(title1).toBeDefined()
+  beforeEach(() => {
+    mockHandlerLike = jest.fn()
+    mockHandlerDelete = jest.fn()
+    container = render(
+      <Blog
+        user={user}
+        blog={blog}
+        handleLike={mockHandlerLike}
+        handleDelete={mockHandlerDelete}
+      />
+    ).container
+  })
 
-  const authorSpan = container.querySelector(".author")
-  expect(authorSpan).toHaveTextContent("Author 1")
+  test("title and author are rendered", () => {
+    const title1 = screen.getByText("Title 1")
+    expect(title1).toBeDefined()
 
-  const url = screen.queryByText("https://some.url")
-  expect(url).not.toBeVisible()
+    const viewButton = screen.getByText("view")
+    expect(viewButton).toBeVisible()
 
-  const likesSpan = container.querySelector(".numberOfLikes")
-  expect(likesSpan).not.toBeVisible()
+    const hideButton = screen.getByText("hide")
+    expect(hideButton).not.toBeVisible()
+
+    const authorSpan = container.querySelector(".author")
+    expect(authorSpan).toHaveTextContent("Author 1")
+
+    const url = screen.queryByText("https://some.url")
+    expect(url).not.toBeVisible()
+
+    const likesSpan = container.querySelector(".numberOfLikes")
+    expect(likesSpan).not.toBeVisible()
+  })
+
+  test("url and number of likes are shown when view button is clicked", async () => {
+    const button = screen.getByText("view")
+    userEvent.click(button)
+
+    const viewButton = screen.getByText("view")
+    expect(viewButton).not.toBeVisible()
+
+    const hideButton = screen.getByText("hide")
+    expect(hideButton).toBeVisible()
+
+    const title1 = screen.getByText("Title 1")
+    expect(title1).toBeDefined()
+
+    const authorSpan = container.querySelector(".author")
+    expect(authorSpan).toHaveTextContent("Author 1")
+
+    const url = screen.queryByText("https://some.url")
+    expect(url).toBeVisible()
+
+    const likesSpan = container.querySelector(".numberOfLikes")
+    expect(likesSpan).toBeVisible()
+  })
+
+  test("when the like button is clicked twice", async () => {
+    const button = screen.getByText("view")
+    userEvent.click(button)
+
+    const like = screen.getByText("like")
+    userEvent.click(like)
+    userEvent.click(like)
+
+    expect(mockHandlerLike.mock.calls).toHaveLength(2)
+  })
 })
