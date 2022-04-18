@@ -36,41 +36,35 @@ const Blog = ({ blog, user, setBlogs, blogs }) => {
     }
   }
 
-  if (visible) {
-    return (
+  return (
+    <div style={blogStyle}>
+      <span className="title">{blog.title}</span>{" "}
+      <span className="author">{blog.author}</span>
+      <button onClick={toggleVisibility} style={showWhenVisible}>
+        hide
+      </button>
+      <button onClick={toggleVisibility} style={hideWhenVisible}>
+        view
+      </button>
       <div style={showWhenVisible}>
-        <div style={blogStyle}>
-          {blog.title} {blog.author}
-          <button onClick={toggleVisibility}>hide</button>
-          <div> {blog.url}</div>
-          <div>
-            {" "}
-            {blog.likes}{" "}
-            <button
-              onClick={async () => {
-                const updatedBlog = await blogService.update(blog.id, {
-                  likes: blog.likes + 1,
-                })
-                setBlogs(blogs.map((b) => (blog.id === b.id ? updatedBlog : b)))
-              }}
-            >
-              like
-            </button>
-          </div>
-          <div>{blog.user.username}</div> {renderDeleteButton()}
+        <div>{blog.url}</div>
+        <div>
+          {blog.likes}{" "}
+          <button
+            onClick={async () => {
+              const updatedBlog = await blogService.update(blog.id, {
+                likes: blog.likes + 1,
+              })
+              setBlogs(blogs.map((b) => (blog.id === b.id ? updatedBlog : b)))
+            }}
+          >
+            like
+          </button>
         </div>
+        <div>{blog.user.username}</div> {renderDeleteButton()}
       </div>
-    )
-  } else {
-    return (
-      <div style={hideWhenVisible}>
-        <div style={blogStyle}>
-          {blog.title} {blog.author}{" "}
-          <button onClick={toggleVisibility}>view</button>
-        </div>
-      </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default Blog
