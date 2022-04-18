@@ -3,7 +3,7 @@ import "@testing-library/jest-dom/extend-expect"
 import { render, screen } from "@testing-library/react"
 import Blog from "./Blog"
 
-test("renders content", () => {
+test("title and author are rendered", () => {
   const user = {
     token: "tst",
     username: "cveklica123",
