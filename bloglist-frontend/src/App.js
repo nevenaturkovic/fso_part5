@@ -91,7 +91,6 @@ const App = () => {
             setBlogs(blogs.concat(returnedBlog))
             return returnedBlog
           }}
-          user={user}
         />
       </Togglable>
       {blogs.map((blog) => (
