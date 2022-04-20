@@ -84,10 +84,13 @@ const App = () => {
       </p>
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm
-          blogs={blogs}
-          setBlogs={setBlogs}
           setNotifications={setNotifications}
           blogFormRef={blogFormRef}
+          createBlog={async (blogObject) => {
+            const returnedBlog = await blogService.create(blogObject)
+            setBlogs(blogs.concat(returnedBlog))
+            return returnedBlog
+          }}
           user={user}
         />
       </Togglable>
