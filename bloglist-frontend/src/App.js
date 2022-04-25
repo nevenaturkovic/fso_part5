@@ -77,6 +77,7 @@ const App = () => {
       <p>
         {user.name} logged in
         <button
+          id="logout-button"
           onClick={() => {
             window.localStorage.removeItem("loggedBlogappUser")
             blogService.setToken(null)

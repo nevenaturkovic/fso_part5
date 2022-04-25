@@ -72,6 +72,30 @@ describe("Blog app", function () {
         cy.get("#view-button").click()
         cy.get("#like-button").click()
       })
+
+      it("user who created a blog can delete it", function () {
+        cy.get("#logout-button").click()
+        const anotherUser = {
+          name: "Miska Misisc",
+          username: "misica",
+          password: "disneyland",
+        }
+        cy.request("POST", "http://localhost:3003/api/users/", anotherUser)
+        cy.get("#username").type("misica")
+        cy.get("#password").type("disneyland")
+        cy.get("#login-button").click()
+
+        cy.get("#view-button").click()
+        cy.should("not.contain", "#delete-button")
+      })
+
+      it("blogs are ordered according to likes with the blog with the most likes being first", function () {
+        cy.contains("Decija pesmarica").parent().as("blogContent")
+        cy.get("@blogContent").find("button").contains("view").click()
+        cy.get("@blogContent").find("button").contains("like").click()
+        cy.get("@blogContent").find("button").contains("hide").click()
+        cy.get("#blogInShort").first().contains("React testing")
+      })
     })
   })
 })
