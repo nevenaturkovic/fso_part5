@@ -14,25 +14,42 @@ describe("Blog app", function () {
     cy.contains("log in to application")
   })
 
-  it("user can log in", function () {
-    cy.contains("login").click()
-    cy.get("#username").type("cveklica123")
-    cy.get("#password").type("password")
-    cy.get("#login-button").click()
+  describe("Login", function () {
+    it("succeeds with correct credentials", function () {
+      cy.contains("login").click()
+      cy.get("#username").type("cveklica123")
+      cy.get("#password").type("password")
+      cy.get("#login-button").click()
 
-    cy.contains("Cveta Cveklic logged in")
+      cy.contains("Cveta Cveklic logged in")
+    })
+
+    it("fails with wrong credentials", function () {
+      cy.contains("login").click()
+      cy.get("#username").type("cveklica")
+      cy.get("#password").type("pasword")
+      cy.get("#login-button").click()
+
+      cy.contains("wrong username or password")
+    })
   })
 
-  describe("when logged in", function () {
+  describe("When logged in", function () {
     beforeEach(function () {
+      // log in user here
       cy.contains("login").click()
       cy.get("input:first").type("cveklica123")
       cy.get("input:last").type("password")
       cy.get("#login-button").click()
     })
 
-    it("a new note can be created", function () {
-      // ...
+    it("A blog can be created", function () {
+      cy.contains("create new blog").click()
+      cy.get("#title").type("a blog created by cypress")
+      cy.get("#author").type("cveta cveklic")
+      cy.get("#url").type("www.cveklic.com")
+      cy.get("#create-button").click()
+      cy.contains("a blog created by cypress")
     })
   })
 })
