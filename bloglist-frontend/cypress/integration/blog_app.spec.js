@@ -10,8 +10,15 @@ describe("Blog app", function () {
     cy.visit("http://localhost:3000")
   })
 
+  it("front page can be opened", function () {
+    cy.contains("log in to application")
+  })
+
   it("Login form is shown", function () {
     cy.contains("log in to application")
+    cy.contains("username")
+    cy.contains("password")
+    cy.contains("login")
   })
 
   describe("Login", function () {
@@ -31,16 +38,16 @@ describe("Blog app", function () {
       cy.get("#login-button").click()
 
       cy.contains("wrong username or password")
+      cy.get(".error").should("have.css", "color", "rgb(255, 0, 0)")
+
+      cy.get("html").should("not.contain", "Cveta Cveklic logged in")
     })
   })
 
   describe("When logged in", function () {
     beforeEach(function () {
       // log in user here
-      cy.contains("login").click()
-      cy.get("input:first").type("cveklica123")
-      cy.get("input:last").type("password")
-      cy.get("#login-button").click()
+      cy.login({ username: "cveklica123", password: "password" })
     })
 
     it("A blog can be created", function () {
@@ -50,6 +57,21 @@ describe("Blog app", function () {
       cy.get("#url").type("www.cveklic.com")
       cy.get("#create-button").click()
       cy.contains("a blog created by cypress")
+    })
+
+    describe("and a blog exists", function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: "Decija pesmarica",
+          author: "Zmaj",
+          url: "www.google.com",
+        })
+      })
+
+      it("a blog can be liked", function () {
+        cy.get("#view-button").click()
+        cy.get("#like-button").click()
+      })
     })
   })
 })
