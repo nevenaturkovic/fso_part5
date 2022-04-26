@@ -20,25 +20,35 @@ const Blog = ({ blog, user, handleLike, handleDelete }) => {
 
   const renderDeleteButton = () => {
     if (blog.user.username === user.username) {
-      return <button onClick={handleDelete}>remove</button>
+      return (
+        <button id="remove-button" onClick={handleDelete}>
+          remove
+        </button>
+      )
     }
   }
 
   return (
-    <div style={blogStyle}>
+    <div className="blog" style={blogStyle}>
       <span className="title">{blog.title}</span>{" "}
       <span className="author">{blog.author}</span>
       <button onClick={toggleVisibility} style={showWhenVisible}>
         hide
       </button>
-      <button id="view-button" onClick={toggleVisibility} style={hideWhenVisible}>
+      <button
+        id="view-button"
+        onClick={toggleVisibility}
+        style={hideWhenVisible}
+      >
         view
       </button>
       <div style={showWhenVisible}>
         <div>{blog.url}</div>
         <div>
           <span className="numberOfLikes">{blog.likes}</span>{" "}
-          <button id="like-button" onClick={handleLike}>like</button>
+          <button id="like-button" onClick={handleLike}>
+            like
+          </button>
         </div>
         <div>{blog.user.username}</div> {renderDeleteButton()}
       </div>
